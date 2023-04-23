@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuan.user.dao.TeacherDao">
+
+    <resultMap type="com.yuan.user.entity.Teacher" id="TeacherMap">
+        <result property="teaId" column="tea_id" jdbcType="VARCHAR"/>
+        <result property="teaName" column="tea_name" jdbcType="VARCHAR"/>
+        <result property="teaSex" column="tea_sex" jdbcType="VARCHAR"/>
+        <result property="teaAge" column="tea_age" jdbcType="INTEGER"/>
+        <result property="teaEducation" column="tea_education" jdbcType="VARCHAR"/>
+        <result property="teaPhone" column="tea_phone" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="teaId" useGeneratedKeys="true">
+        insert into bishe.teacher(tea_name, tea_sex, tea_age, tea_education, tea_phone)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.teaName}, #{entity.teaSex}, #{entity.teaAge}, #{entity.teaEducation}, #{entity.teaPhone})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="teaId" useGeneratedKeys="true">
+        insert into bishe.teacher(tea_name, tea_sex, tea_age, tea_education, tea_phone)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.teaName}, #{entity.teaSex}, #{entity.teaAge}, #{entity.teaEducation}, #{entity.teaPhone})
+        </foreach>
+        on duplicate key update
+        tea_name = values(tea_name) , tea_sex = values(tea_sex) , tea_age = values(tea_age) , tea_education =
+        values(tea_education) , tea_phone = values(tea_phone)
+    </insert>
+
+</mapper>
+

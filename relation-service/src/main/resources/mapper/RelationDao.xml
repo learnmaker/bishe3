@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuan.relation.dao.RelationDao">
+
+    <resultMap type="com.yuan.relation.entity.Relation" id="RelationMap">
+        <result property="relId" column="rel_id" jdbcType="VARCHAR"/>
+        <result property="stuId" column="stu_id" jdbcType="VARCHAR"/>
+        <result property="parId" column="par_id" jdbcType="VARCHAR"/>
+        <result property="relName" column="rel_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="relId" useGeneratedKeys="true">
+        insert into bishe.relation(stu_id, par_id, rel_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.stuId}, #{entity.parId}, #{entity.relName})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="relId" useGeneratedKeys="true">
+        insert into bishe.relation(stu_id, par_id, rel_name)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.stuId}, #{entity.parId}, #{entity.relName})
+        </foreach>
+        on duplicate key update
+        stu_id = values(stu_id) , par_id = values(par_id) , rel_name = values(rel_name)
+    </insert>
+
+</mapper>
+
